@@ -72,6 +72,10 @@ dependencies {
     implementation(libs.androidx.ui.text.google.fonts)
     implementation(libs.material3)
 
+    implementation("androidx.compose.material3:material3:1.2.1")
+    implementation("androidx.compose.material3:material3-window-size-class:1.2.1")
+    implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.3.0-beta02")
+
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.runtime.livedata)
@@ -80,9 +84,13 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
 
+    implementation("androidx.compose.ui:ui:1.6.7")
+    implementation(libs.androidx.material3.v110)
+
 
     implementation("com.google.dagger:hilt-android:2.48")
     kapt("com.google.dagger:hilt-android-compiler:2.48")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     implementation(libs.kotlinx.metadata.jvm)
 

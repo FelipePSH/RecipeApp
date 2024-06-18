@@ -11,25 +11,39 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CategoriesViewModel @Inject constructor(private val repository: CategoriesRepository) : ViewModel() {
+class CategoriesViewModel @Inject constructor(
+    private val repository: CategoriesRepository
+) : ViewModel() {
 
-    val _categorieState = mutableStateOf(CategoriesState())
-    val categoriesState: State<CategoriesState> = _categorieState
+    private val _categoriesState = mutableStateOf(CategoriesState())
+    val categoriesState: State<CategoriesState> = _categoriesState
+
+    init {
+        fetchCategories()
+    }
 
     private fun fetchCategories() {
         viewModelScope.launch {
-            _categorieState.value = CategoriesState(loading = true)
-            _categorieState.value = try {
-                CategoriesState(list = repository.getCategories())
+            _categoriesState.value = CategoriesState(isLoading = true)
+            try {
+                _categoriesState.value = CategoriesState(
+                    categories = repository.getCategories().categories,
+                    isLoading = false,
+                    error = null
+                )
             } catch (e: Exception) {
-                CategoriesState(error = e.localizedMessage)
+                _categoriesState.value = _categoriesState.value.copy(
+                    isLoading = false,
+                    error = "Error fetching categories ${e.message}"
+                )
             }
         }
     }
-}
 
-data class CategoriesState(
-    val loading: Boolean = false,
-    val list: List<Category> = emptyList(),
-    val error: String? = null
-)
+    data class CategoriesState(
+        val isLoading: Boolean = false,
+        val categories: List<Category> = emptyList(),
+        val error: String? = null
+    )
+
+}

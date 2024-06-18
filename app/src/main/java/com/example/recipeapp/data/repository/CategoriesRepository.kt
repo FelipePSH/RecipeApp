@@ -7,4 +7,7 @@ class CategoriesRepository @Inject constructor(private val apiService: ApiServic
 
     suspend fun getCategories() = apiService.getCategories()
 
+
+    suspend fun getRecipesByCategory(category: String) = apiService.getRecipesByCategory(category)
+
 }
