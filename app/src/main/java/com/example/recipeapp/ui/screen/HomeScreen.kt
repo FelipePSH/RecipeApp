@@ -47,8 +47,11 @@ import com.example.recipeapp.ui.viewmodel.CategoriesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(categoriesViewModel: CategoriesViewModel = hiltViewModel()) {
-    val viewState by categoriesViewModel.categoriesState
+fun HomeScreen(
+    categoriesViewModel: CategoriesViewModel = hiltViewModel(),
+    navigateToRecipesByCategory: (Category) -> Unit,
+    viewState : CategoriesViewModel.CategoriesState
+) {
 
     var text by remember {
         mutableStateOf("")
@@ -66,7 +69,7 @@ fun HomeScreen(categoriesViewModel: CategoriesViewModel = hiltViewModel()) {
             Modifier
                 .fillMaxWidth()
                 .semantics { var isTraversalGroup = true }) {
-            SearchBar(
+            androidx.compose.material3.SearchBar(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
                     .semantics { traversalIndex = 0f },
@@ -107,6 +110,7 @@ fun HomeScreen(categoriesViewModel: CategoriesViewModel = hiltViewModel()) {
             }
         }
 
+
         Text(
             text = "Ready to cook?",
             style = MaterialTheme.typography.headlineLarge,
@@ -115,12 +119,12 @@ fun HomeScreen(categoriesViewModel: CategoriesViewModel = hiltViewModel()) {
             modifier = Modifier.padding(all = 16.dp)
         )
 
-        CategoryRow(categories = viewState.categories)
+        CategoryRow(categories = viewState.categories, navigateToRecipesByCategory = navigateToRecipesByCategory)
     }
 }
 
 @Composable
-fun CategoryRow(categories: List<Category>) {
+fun CategoryRow(categories: List<Category>, navigateToRecipesByCategory: (Category) -> Unit) {
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -135,7 +139,10 @@ fun CategoryRow(categories: List<Category>) {
         LazyRow(
         ) {
             items(categories) { category ->
-                CategoryItem(category = category)
+                CategoryItem(
+                    category = category,
+                    navigateToRecipesByCategory = navigateToRecipesByCategory
+                    )
             }
         }
     }

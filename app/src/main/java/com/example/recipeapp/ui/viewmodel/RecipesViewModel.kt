@@ -4,50 +4,71 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.recipeapp.data.model.Category
+import com.example.recipeapp.data.model.PreparedRecipe
 import com.example.recipeapp.data.model.RecipesByCategory
-import com.example.recipeapp.data.repository.CategoriesRepository
+import com.example.recipeapp.data.repository.RecipeRepository
+import com.example.recipeapp.domain.RecipeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CategoriesViewModel @Inject constructor(
-    private val repository: CategoriesRepository
+class RecipesViewModel @Inject constructor(
+    private val repository: RecipeRepository,
+    private val recipeUseCase: RecipeUseCase
 ) : ViewModel() {
 
-    private val _categoriesState = mutableStateOf(CategoriesState())
-    val categoriesState: State<CategoriesState> = _categoriesState
-
+    private val _recipeState = mutableStateOf(RecipeListState())
+    val recipeState: State<RecipeListState> = _recipeState
 
     private val _selectedCategory = mutableStateOf(RecipeByCategoryState())
     val selectedCategoryState: State<RecipeByCategoryState> = _selectedCategory
 
-    init {
-        fetchCategories()
-    }
+//     fun fetchRecipeById(id: String){
+//        viewModelScope.launch {
+//            _recipeState.value = RecipeState(isLoading = true)
+//            try {
+//                _recipeState.value = RecipeState(
+//                    isLoading = false,
+//                    recipe = recipeUseCase.fetchRecipeById(id),
+//                    error = null
+//                )
+//            } catch (e: Exception) {
+//                _recipeState.value = RecipeState(
+//                    isLoading = false,
+//                    recipe = null,
+//                    error = e.message
+//                )
+//            }
+//        }
+//    }
 
-    private fun fetchCategories() {
+
+    fun fetchListOfRecipesByCategory(categoryName: String ) {
         viewModelScope.launch {
-            _categoriesState.value = CategoriesState(isLoading = true)
+            _recipeState.value = RecipeListState(isLoading = true)
             try {
-                _categoriesState.value = CategoriesState(
-                    categories = repository.getCategories().categories,
+                val recipes = recipeUseCase.fetchListOfRecipesByCategory(categoryName)
+                println("Fetched recipes: $recipes")
+                _recipeState.value = RecipeListState(
                     isLoading = false,
+                    recipe = recipes,
                     error = null
                 )
+
             } catch (e: Exception) {
-                _categoriesState.value = _categoriesState.value.copy(
+                _recipeState.value = RecipeListState(
                     isLoading = false,
-                    error = "Error fetching categories ${e.message}"
+                    recipe = listOf(),
+                    error = e.message
                 )
             }
         }
     }
 
-    data class CategoriesState(
+    data class RecipeListState(
         val isLoading: Boolean = false,
-        val categories: List<Category> = emptyList(),
+        val recipe: List<PreparedRecipe> = emptyList(),
         val error: String? = null
     )
 
@@ -76,8 +97,6 @@ class CategoriesViewModel @Inject constructor(
         val recipes: List<RecipesByCategory> = emptyList(),
         val error: String? = null
     )
-
-
 
 
 }

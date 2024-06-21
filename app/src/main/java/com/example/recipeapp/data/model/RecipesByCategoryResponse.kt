@@ -1,5 +1,8 @@
 package com.example.recipeapp.data.model
 
+import com.google.gson.annotations.SerializedName
+
 data class RecipesByCategoryResponse(
-    val meals: List<RecipesByCategory>
+    @SerializedName("meals")
+    val recipesByCategories: List<RecipesByCategory>
 )

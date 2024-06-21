@@ -1,6 +1,7 @@
 package com.example.recipeapp.ui.components.categories
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -21,16 +22,23 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.recipeapp.data.model.Category
 
 @Composable
-fun CategoryItem(category: Category) {
+fun CategoryItem(
+    category: Category,
+    navigateToRecipesByCategory: (Category) -> Unit
+) {
     Column(
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .clickable{ navigateToRecipesByCategory(category) },
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
             painter = rememberAsyncImagePainter(model = category.strCategoryThumb),
             contentDescription = "image of a meal of category ${category.strCategory}",
-            modifier = Modifier.height(56.dp).width(56.dp)
+            modifier = Modifier
+                .height(56.dp)
+                .width(56.dp)
         )
         Text(
             text = category.strCategory,
@@ -50,7 +58,10 @@ fun CategoryItemPreview() {
             "1",
             "beef",
             strCategoryThumb = "https://www.themealdb.com/images/category/beef.png",
-            strCategoryDescription = "beef"))
+            strCategoryDescription = "beef"
+        ),
+        navigateToRecipesByCategory = {}
+    )
 }
 
 

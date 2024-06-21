@@ -1,5 +1,6 @@
 package com.example.recipeapp.data.network
 
+import MealResponse
 import com.example.recipeapp.data.model.CategoriesResponse
 import com.example.recipeapp.data.model.RecipesByCategoryResponse
 import retrofit2.http.GET
@@ -12,8 +13,14 @@ interface ApiService {
 
 
     @GET("filter.php")
-    suspend fun getRecipesByCategory(
+    suspend fun fetchRecipesByCategory(
         @Query("c") category: String
     ): RecipesByCategoryResponse
+
+
+    @GET("lookup.php")
+    suspend fun fetchRecipeById(
+        @Query("i") id: String
+    ) : MealResponse
 
 }
