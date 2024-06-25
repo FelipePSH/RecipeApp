@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
@@ -32,6 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.recipeapp.data.model.Category
 import com.example.recipeapp.data.model.PreparedRecipe
+import com.example.recipeapp.ui.components.recipe.RecipeCardItem
 import com.example.recipeapp.ui.viewmodel.CategoriesViewModel
 import com.example.recipeapp.ui.viewmodel.RecipesViewModel
 
@@ -87,59 +89,13 @@ fun RecipesByCategoryScreen(
 }
 
 @Composable
-fun MealsByCategoryCard(recipe: PreparedRecipe) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Card(
-            onClick = { /*TODO*/ }, modifier = Modifier
-                .fillMaxWidth()
-                .height(120.dp)
-                .padding(vertical = 0.dp),
-            shape = MaterialTheme.shapes.extraSmall,
-            elevation = CardDefaults.cardElevation(0.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface
-            ),
-            border = BorderStroke(0.5.dp, color = Color.LightGray)
-        ) {
-            Row(modifier = Modifier.fillMaxSize()) {
-                Column(modifier = Modifier.fillMaxHeight()) {
-
-                    recipe.strMeal?.let {
-                        Text(
-                            text = it,
-                            style = MaterialTheme.typography.titleSmall,
-                            modifier = Modifier.padding(10.dp)
-                        )
-                    }
-
-
-                }
-                Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxSize()) {
-                    Image(
-                        painter = rememberAsyncImagePainter(model = recipe.strMealThumb),
-                        contentDescription = "image of: ${recipe.strMeal}",
-                        contentScale = ContentScale.Crop
-                    )
-                }
-
-            }
-        }
-    }
-}
-
-
-@Composable
 fun MealsByCategoryColumn(meals: List<PreparedRecipe>) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(8.dp)
     ) {
         items(meals) { meal ->
-            MealsByCategoryCard(recipe = meal)
+            RecipeCardItem(recipe = meal)
         }
     }
 }
