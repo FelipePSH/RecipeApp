@@ -49,7 +49,7 @@ fun RecipeCardItem(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
-        border = BorderStroke(0.5.dp, color = Color.LightGray)
+        border = BorderStroke(0.1.dp, color = Color.LightGray)
     ) {
         Row(modifier = modifier
             .fillMaxWidth()

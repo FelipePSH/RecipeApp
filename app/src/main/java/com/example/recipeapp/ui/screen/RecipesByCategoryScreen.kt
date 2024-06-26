@@ -62,11 +62,6 @@ fun RecipesByCategoryScreen(
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleMedium
         )
-        Text(
-            text = category.strCategoryDescription,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.labelSmall
-        )
 
         when {
             viewStateRecipe.isLoading -> {
