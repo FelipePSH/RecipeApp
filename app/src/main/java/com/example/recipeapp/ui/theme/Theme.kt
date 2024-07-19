@@ -15,10 +15,9 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-import com.example.recipeapp.ui.theme.AppTypography
 import com.example.recipeapp.ui.theme.*
 
-private val lightScheme = lightColorScheme(
+private val AppLightColorScheme = lightColorScheme(
     primary = primaryLight,
     onPrimary = onPrimaryLight,
     primaryContainer = primaryContainerLight,
@@ -56,7 +55,7 @@ private val lightScheme = lightColorScheme(
     surfaceContainerHighest = surfaceContainerHighestLight,
 )
 
-private val darkScheme = darkColorScheme(
+private val AppDarkColorScheme = darkColorScheme(
     primary = primaryDark,
     onPrimary = onPrimaryDark,
     primaryContainer = primaryContainerDark,
@@ -264,28 +263,24 @@ fun RecipeAppTheme(
     dynamicColor: Boolean = true,
     content: @Composable() () -> Unit
 ) {
-  val colorScheme = when {
-      dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-          val context = LocalContext.current
-          if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-      }
-      
-      darkTheme -> darkScheme
-      else -> lightScheme
-  }
+    val AppColorScheme = if (darkTheme) {
+        AppDarkColorScheme
+    } else {
+        AppLightColorScheme
+    }
   val view = LocalView.current
   if (!view.isInEditMode) {
     SideEffect {
       val window = (view.context as Activity).window
-      window.statusBarColor = colorScheme.primary.toArgb()
+      window.statusBarColor = AppColorScheme.primary.toArgb()
       WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
     }
   }
 
   MaterialTheme(
-    colorScheme = colorScheme,
+    colorScheme = AppColorScheme,
     typography = AppTypography,
-    content = content
+    content = content,
   )
 }
 
